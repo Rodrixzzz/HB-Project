@@ -2,8 +2,8 @@
 var nombreUsuario = "Rodrigo Cejas";
 var saldoCuenta = 3000;
 var limiteExtraccion = 1000;
-var serviciosMonto = [350,425,210,570,1000];
-var serviciosDesc  = ["Agua","Luz","Internet","Telefono","GIM"];
+var serviciosMonto = [350,425,210,570];
+var serviciosDesc  = ["Agua","Luz","Internet","Telefono"];
 var cuentasAmigas = ["1234567","7654321"];
 var codigoSeguridad = "1234";
 
@@ -28,8 +28,7 @@ function extraerDinero() {
     var dineroAExtraer = ingresarDatos("extraer");
     if(  verificarLimite(dineroAExtraer)  && verificarMultiplo(dineroAExtraer) && verificarSaldoDisponible(dineroAExtraer))
     {
-        saldoCuenta -= dineroAExtraer;
-        actualizarSaldoEnPantalla();
+        actualizarSaldo(dineroAExtraer,"resta");
         alert("Saldo antes de la operación: " + "$ " + saldoAnterior +  "\n" + "Dinero a extraer: " + "$ " + dineroAExtraer + "\n" + "Saldo actual: " + "$ " + saldoCuenta);
     }
  
@@ -38,8 +37,7 @@ function extraerDinero() {
 function depositarDinero() {
     var saldoAnterior = saldoCuenta;
     var dineroADepositar = ingresarDatos("depositar");
-    saldoCuenta += dineroADepositar;
-    actualizarSaldoEnPantalla();
+    actualizarSaldo(dineroADepositar,"suma");
     alert("Saldo antes de la operación: " + "$ " + saldoAnterior +  "\n" + "Dinero a depositar: " + "$ " + dineroADepositar + "\n" + "Saldo actual: " + "$ " + saldoCuenta);
 
 }
@@ -52,8 +50,7 @@ function pagarServicio() {
     {
         if(verificarSaldoDisponible(monto))
         {
-            saldoCuenta-=monto;
-            actualizarSaldoEnPantalla();
+            actualizarSaldo(monto,"resta");
             alert("Has pagado " + serviciosDesc[servicioAPagar-1] + "\n" + "Saldo antes de la operación: " + "$ " + saldoAnterior +  "\n" + "Monto del servicio: " + "$ " + monto + "\n" + "Saldo actual: " + "$ " + saldoCuenta);
         }
     }
@@ -67,8 +64,7 @@ function transferirDinero() {
         var cuentaATransferir=ingresarDatos("cuentaAmiga");
         if (verificarCuentaAmiga(cuentaATransferir))
         {
-            saldoCuenta-=montoATransferir;
-            actualizarSaldoEnPantalla();
+            actualizarSaldo(montoATransferir,"resta");
             alert("Saldo antes de la operación: " + "$ " + saldoAnterior +  "\n" + "Dinero a transferir: " + "$ " + montoATransferir + "\n" + "Saldo actual: " + "$ " + saldoCuenta + "\n" + "Cuenta destino: " + cuentaATransferir);
         }
     }
@@ -114,10 +110,7 @@ function obtenerMensaje(param)
             mensaje = "Ingrese el nuevo limite de extracción";
             break;
         case "pagar":
-            mensaje = "Ingrese el numero que corresponda con el servicio que quiere pagar: " ;
-            for (var index = 0; index < serviciosDesc.length; index++) {
-                mensaje += "\n" + (index + 1 ) + " - " + serviciosDesc[index];
-            }
+            mensaje = "Ingrese el numero que corresponda con el servicio que quiere pagar: " +  imprimirVector();
             break;
         case "transferir":
             mensaje = "Ingrese la cantidad de dinero a transferir";
@@ -152,6 +145,19 @@ function verificarSaldoDisponible(valorOperacion)
     }
     alert("No posee Saldo suficiente para realizar la operación");
     return false;
+}
+
+function actualizarSaldo(monto,operacion)
+{
+    if(operacion=="suma")
+    {
+        saldoCuenta += monto;
+    }
+    else
+    {
+        saldoCuenta -= monto;
+    }
+    actualizarSaldoEnPantalla();
 }
 //Para la Funcionalidad de extracción.
 function verificarMultiplo(valorOperacion)
@@ -193,6 +199,14 @@ function obtenerServicio(valor)
         alert("Servicio inexistente");
         return false;
     }
+}
+function imprimirVector()
+{
+    var mensaje = " ";
+    for (var index = 0; index < serviciosDesc.length; index++) {
+        mensaje += "\n" + (index + 1 ) + " - " + serviciosDesc[index];
+    }
+    return mensaje;
 }
 //Para la Funcionalidad de Transferencia.
 function verificarCuentaAmiga(cuenta)
