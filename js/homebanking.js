@@ -76,7 +76,7 @@ function iniciarSesion() {
 
 }
 
-//Generales
+//Funciones generales
 function ingresarDatos(param)
 {
     var invalido = true;
@@ -84,7 +84,7 @@ function ingresarDatos(param)
     while (invalido) {
         var inputUsuario = prompt(texto);
         var valorUsuario = parseInt(inputUsuario);
-        if (valorUsuario != null && !isNaN(valorUsuario) )
+        if (valorUsuario != null && !isNaN(valorUsuario) && valorUsuario >= 0 )
         {
             invalido = false;
         }
@@ -92,7 +92,7 @@ function ingresarDatos(param)
         {
             alert("Ingrese un valor valido");
         }
-    }
+    }  
     return valorUsuario;
 }
 
@@ -149,7 +149,7 @@ function verificarSaldoDisponible(valorOperacion)
 
 function actualizarSaldo(monto,operacion)
 {
-    if(operacion=="suma")
+    if(operacion == "suma")
     {
         saldoCuenta += monto;
     }
@@ -190,7 +190,7 @@ function obtenerServicio(valor)
             return false;
             break;
     } */
-    if( valor <= serviciosMonto.length && valor != 0)
+    if( valor > 0 && valor <= serviciosMonto.length )
     {
         return serviciosMonto[valor-1];
     }
@@ -225,7 +225,7 @@ function verificarClave(clave)
 {
     if (clave == codigoSeguridad)
     {
-        alert("Bienvenido/a" + nombreUsuario + " ya puedes comenzar a realizar operaciones");
+        alert("Bienvenido/a " + nombreUsuario + " ya puedes comenzar a realizar operaciones");
     }
     else
     {
@@ -242,6 +242,11 @@ function cargarNombreEnPantalla() {
 
 function actualizarSaldoEnPantalla() {
     document.getElementById("saldo-cuenta").innerHTML = "$" + saldoCuenta;
+    var elemento=document.querySelector(".green-container");
+    if (saldoCuenta == 0)
+    {
+        elemento.style.background  = 'gold';
+    }
 }
 
 function actualizarLimiteEnPantalla() {
