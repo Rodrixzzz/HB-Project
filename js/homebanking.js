@@ -198,10 +198,9 @@ function verificarMultiplo(valorOperacion)
     return true;
 }
 //Para la Funcionalidad de Pago de servicios.
-/*Nota para evaluador: Se que el CHECKLIST pide que sea con un switch, pero dado termine encarando el ejercicio, es más facil evaluar por if
-que utilizar un SWITCH para validar que el servicio sea valido.*/
 function obtenerServicio(valor)
 {
+/*
     if( valor > 0 && valor <= serviciosMonto.length )
     {
         return serviciosMonto[valor-1];
@@ -210,6 +209,16 @@ function obtenerServicio(valor)
     {
         alert("Servicio inexistente");
         return false;
+    }
+*/
+    switch (true) {
+        case (valor > 0 && valor <= serviciosMonto.length):
+            return serviciosMonto[valor-1];
+            break;
+        default:
+            alert("Servicio inexistente");
+            return false;
+            break;
     }
 }
 function imprimirVector()
