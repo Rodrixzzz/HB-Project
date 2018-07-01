@@ -18,40 +18,50 @@ window.onload = function() {
 //Funciones que tenes que completar
 function cambiarLimiteDeExtraccion() {
     var nuevoLimite = ingresarDatos("limite");
-    limiteExtraccion = nuevoLimite;
-    actualizarLimiteEnPantalla();
-    alert(imprimirResultado("",nuevoLimite,"limite",""));
+    if(nuevoLimite !== false)
+    {
+        limiteExtraccion = nuevoLimite;
+        actualizarLimiteEnPantalla();
+        alert(imprimirResultado("",nuevoLimite,"limite",""));
+    }
 }
 
 function extraerDinero() {
     var saldoAnterior = saldoCuenta;
     var dineroAExtraer = ingresarDatos("extraer");
-    if(  verificarLimite(dineroAExtraer)  && verificarMultiplo(dineroAExtraer) && verificarSaldoDisponible(dineroAExtraer))
+    if(dineroAExtraer !== false)
     {
-        actualizarSaldo(dineroAExtraer,"resta");
-        alert(imprimirResultado(saldoAnterior,dineroAExtraer,"extraer",""));
+        if(  verificarLimite(dineroAExtraer)  && verificarMultiplo(dineroAExtraer) && verificarSaldoDisponible(dineroAExtraer))
+        {
+            actualizarSaldo(dineroAExtraer,"resta");
+            alert(imprimirResultado(saldoAnterior,dineroAExtraer,"extraer",""));
+        }
     }
- 
 }
 
 function depositarDinero() {
     var saldoAnterior = saldoCuenta;
     var dineroADepositar = ingresarDatos("depositar");
-    actualizarSaldo(dineroADepositar,"suma");
-    alert(imprimirResultado(saldoAnterior,dineroADepositar,"depositar",""));
-
+    if (dineroADepositar !== false )
+    {
+        actualizarSaldo(dineroADepositar,"suma");
+        alert(imprimirResultado(saldoAnterior,dineroADepositar,"depositar",""));
+    }
 }
 
 function pagarServicio() {
     var saldoAnterior = saldoCuenta;
     var servicioAPagar = ingresarDatos("pagar");
-    var monto=obtenerServicio(servicioAPagar);
-    if (monto != false)
+    if(servicioAPagar !== false )
     {
-        if(verificarSaldoDisponible(monto))
+        var monto=obtenerServicio(servicioAPagar);
+        if (monto !== false)
         {
-            actualizarSaldo(monto,"resta");
-            alert(imprimirResultado(saldoAnterior,monto,"pagar",servicioAPagar));
+            if(verificarSaldoDisponible(monto))
+            {
+                actualizarSaldo(monto,"resta");
+                alert(imprimirResultado(saldoAnterior,monto,"pagar",servicioAPagar));
+            }
         }
     }
 }
@@ -59,13 +69,19 @@ function pagarServicio() {
 function transferirDinero() {
     var saldoAnterior = saldoCuenta;
     var montoATransferir = ingresarDatos("transferir");
-    if(verificarSaldoDisponible(montoATransferir))
+    if(montoATransferir !== false)
     {
-        var cuentaATransferir=ingresarDatos("cuentaAmiga");
-        if (verificarCuentaAmiga(cuentaATransferir))
+        if(verificarSaldoDisponible(montoATransferir))
         {
-            actualizarSaldo(montoATransferir,"resta");
-            alert(imprimirResultado(saldoAnterior,montoATransferir,"transferir",cuentaATransferir));
+            var cuentaATransferir=ingresarDatos("cuentaAmiga");
+            if(cuentaATransferir !== false )
+            {
+                if (verificarCuentaAmiga(cuentaATransferir))
+                {
+                    actualizarSaldo(montoATransferir,"resta");
+                    alert(imprimirResultado(saldoAnterior,montoATransferir,"transferir",cuentaATransferir));
+                }
+            }
         }
     }
 }
@@ -80,21 +96,18 @@ function iniciarSesion() {
 //Funcion que Valida que solo se puedan ingresar numeros y valores positivos.
 function ingresarDatos(param)
 {
-    var invalido = true;
     var texto = obtenerMensaje(param);
-    while (invalido) {
-        var inputUsuario = prompt(texto);
-        var valorUsuario = parseInt(inputUsuario);
-        if (valorUsuario !== null && !isNaN(valorUsuario) && valorUsuario >= 0 )
-        {
-            invalido = false;
-        }
-        else
-        {
-            alert("Ingrese un valor valido");
-        }
-    }  
-    return valorUsuario;
+    var inputUsuario = prompt(texto);
+    var valorUsuario = parseInt(inputUsuario);
+    if (!isNaN(valorUsuario) && valorUsuario >= 0 )
+    {
+        return valorUsuario;
+    }
+    else
+    {
+        alert("Ingrese un valor valido");
+        return false;
+    }   
 }
 //Función que obtiene el mensaje para cada operación.
 function obtenerMensaje(param)
@@ -190,7 +203,7 @@ function imprimirResultado(saldoAnterior,monto,operacion,opcional)
 //Para la Funcionalidad de extracción.
 function verificarMultiplo(valorOperacion)
 {
-    if(valorOperacion % 100 != 0)
+    if(valorOperacion % 100 !== 0)
     {
         alert("El monto ingresado debe ser multiplo de 100");
         return false;
@@ -200,17 +213,6 @@ function verificarMultiplo(valorOperacion)
 //Para la Funcionalidad de Pago de servicios.
 function obtenerServicio(valor)
 {
-/*
-    if( valor > 0 && valor <= serviciosMonto.length )
-    {
-        return serviciosMonto[valor-1];
-    }
-    else
-    {
-        alert("Servicio inexistente");
-        return false;
-    }
-*/
     switch (true) {
         case (valor > 0 && valor <= serviciosMonto.length):
             return serviciosMonto[valor-1];
@@ -244,7 +246,7 @@ function verificarCuentaAmiga(cuenta)
 //Para la clave de acceso.
 function verificarClave(clave)
 {
-    if (clave == codigoSeguridad)
+    if (clave === codigoSeguridad)
     {
         alert("Bienvenido/a " + nombreUsuario + " ya puedes comenzar a realizar operaciones");
     }
